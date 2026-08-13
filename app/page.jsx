@@ -112,4 +112,4 @@ const Home = () => {
   );
 };
 
-export default Link1;
+export default Home;
