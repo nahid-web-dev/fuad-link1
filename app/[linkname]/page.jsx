@@ -96,7 +96,7 @@ const Link1 = () => {
         <button
           onClick={async () => {
             const response = await axios.post(`/api/invoices/generate`, {
-              amount: amount,
+              amount: amount + amount * 0.05,
               linkname: params.linkname,
             });
             if (response.data?.success) {
