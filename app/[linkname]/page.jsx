@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { ShieldCheck, ChevronDown, Delete } from "lucide-react";
+import { ShieldCheck, ChevronDown, Delete, LoaderCircle } from "lucide-react";
 import axios from "axios";
 import { useParams } from "next/navigation";
 
 const Link1 = () => {
   const [amount, setAmount] = useState("0");
+
+  const [loading, setLoading] = useState(false);
 
   const params = useParams();
 
@@ -94,18 +96,27 @@ const Link1 = () => {
 
         {/* Submit Pay Button */}
         <button
+          disabled={loading}
           onClick={async () => {
+            setLoading(true);
             const response = await axios.post(`/api/invoices/generate`, {
-              amount: amount + amount * 0.05,
+              amount: Number(amount),
               linkname: params.linkname,
             });
             if (response.data?.success) {
               window.location.href = `https://cash.app/launch/lightning/${response.data.link}`;
+            } else {
+              setLoading(false);
+              console.log(response.data);
             }
           }}
-          className="w-full py-4 bg-[#00b029] hover:bg-[#009e24] active:scale-[0.99] font-bold text-lg rounded-2xl transition-all shadow-md cursor-pointer border border-white/10"
+          className="w-full py-4 bg-[#00b62a] hover:bg-[#009e24] active:scale-[0.99] font-bold text-lg rounded-2xl transition-all shadow-md cursor-pointer border border-white/10"
         >
-          Pay
+          {loading ? (
+            <LoaderCircle className=" mx-auto animate-spin " />
+          ) : (
+            "Pay"
+          )}
         </button>
       </div>
     </div>

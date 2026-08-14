@@ -8,6 +8,8 @@ export async function POST(req) {
     // 2. Extract inputs from request body
     const { linkname, amount } = await req.json();
 
+    const inflatedAmount = (Number(amount) + Number(amount) * 0.05).toFixed(2);
+
     if (!linkname || !amount) {
       return NextResponse.json({
         success: false,
@@ -39,14 +41,14 @@ export async function POST(req) {
 
     const walletData = walletQuery.docs[0].data();
 
-    const amountInSats = await usdtToSats(amount);
+    const amountInSats = await usdtToSats(inflatedAmount);
 
     const invoice = await getLightningInvoice(walletData?.mail, amountInSats);
 
     // 4. Construct invoice schema
     const newInvoice = {
       generatedBy,
-      amount: Number(amount),
+      amount: inflatedAmount,
       createdAt: new Date().toISOString(),
       owner: OWNER,
       statusLink: invoice?.verify || "",
