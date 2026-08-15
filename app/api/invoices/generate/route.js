@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const OWNER = process.env.NEXT_PUBLIC_OWNER;
+    console.log("owner", OWNER);
     // 2. Extract inputs from request body
     const { linkname, amount } = await req.json();
 
@@ -61,10 +62,6 @@ export async function POST(req) {
     return NextResponse.json({
       success: true,
       message: "Invoice created successfully.",
-      // data: {
-      //   id: invoiceRef.id,
-      //   ...newInvoice,
-      // },
       link: invoice?.pr,
     });
   } catch (error) {
